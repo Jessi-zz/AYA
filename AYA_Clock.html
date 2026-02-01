@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AYA's clock</title>
+
+  <!-- ====================  code & design by @zzTajuhn  ==================== -->
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Afacad:wght@500&display=swap");
+
+    body {
+      height: 471px;
+      width: 382px;
+      margin: 0;
+      font-family: "Afacad", sans-serif;
+      font-weight: 500;
+      position: relative;
+      background-color: transparent;
+    }
+
+    /* ========== 時鐘背景 ========== */
+    #clock-background {
+      position: fixed;
+      display: block;
+      height: 471px;
+      width: 382px;
+      background-repeat: no-repeat;
+      background-image: url(./clock_back.svg);
+    }
+
+    /* ========== 時間顯示 ========== */
+    #hour {
+      position: absolute;
+      font-size: 111px;
+      text-align: center;
+      top: 60px;
+      left: 100px;
+      color: transparent;
+      -webkit-text-stroke: 6px #231815;
+    }
+
+    #hour::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(to bottom, #ebc169, #ffede0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      -webkit-text-stroke: 0;
+    }
+
+    #minute {
+      position: absolute;
+      font-size: 90px;
+      width: 200px;
+      text-align: center;
+      color: #231815;
+      top: 140px;
+      right: 60px;
+    }
+
+    /* ========== 日期 & 星期 ========== */
+    .info-box {
+      position: absolute;
+      background-color: #231815;
+      border-radius: 25px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    .date-box {
+      top: 180px;
+      left: 80px;
+      animation: float-right 10s ease-in-out infinite;
+    }
+
+    .day-box {
+      top: 210px;
+      left: 100px;
+      animation: float-left 8s ease-in-out infinite;
+    }
+
+    @keyframes float-right {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); } 
+    }
+
+    @keyframes float-left {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-10px); } 
+    }
+  </style>
+</head>
+<body>
+  <span id="clock-background"></span>
+  
+  <div class="clock-container">
+    <div id="hour" data-text="00"></div>
+    <div id="minute"></div>
+    <div class="info-box date-box"><span id="date-display"></span></div>
+    <div class="info-box day-box"><span id="day"></span></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      function updateClock() {
+        const now = new Date();
+        
+        // 時間
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        
+        // 日期
+        const month = (now.getMonth() + 1).toString().padStart(2, "0");
+        const date = now.getDate().toString().padStart(2, "0");
+        const day = now.toLocaleString("en-US", { weekday: "short" }).toUpperCase();
+
+        // 更新 DOM
+        const hourEl = document.getElementById("hour");
+        hourEl.textContent = hours;
+        hourEl.setAttribute("data-text", hours);
+
+        document.getElementById("minute").textContent = minutes;
+        document.getElementById("date-display").textContent = `${month}.${date}`;
+        document.getElementById("day").textContent = day;
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock();
+    });
+  </script>
+</body>
+</html>
